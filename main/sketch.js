@@ -16,18 +16,19 @@ class bullet {
     this.x = 300;
     this.y = 100;
   }
-  function show(){
+  show(){
     stroke(255);
     noFill();
     rect(this.x,this.y,10,10);
   }
-  function moveAndHitDet() {
-    bullet.y += 1;
+  moveAndHitDet() {
+    this.y += 1;
     let hit = collideRectRect(this.x,this.y,10,10,x,y,80,5);
     if (hit) {
       console.log("hit");
     }
-}
+  }
+
 }
 function setup() {
   createCanvas(700,500);
@@ -38,8 +39,8 @@ function draw() {
   background (backgroundColor);
   displayEntities();
   handleKeys();
-  bullet.moveAndHitDet();
-  bullet.show();
+  Bullet.moveAndHitDet();
+  Bullet.show();
 }
 function handleKeys() {
   if (mouseIsPressed) {
@@ -69,5 +70,4 @@ function displayEntities() {
   vertex(400, 40);
   vertex(420, 60);
   endShape(CLOSE);
-}
 }
