@@ -1,7 +1,7 @@
 //interactive scene with base controls and shapes for the major project. extra for experts is my own shape, sounds will be in a later part of the project.
 
 // global variables
-let Bullet;
+let Bullets = [];
 let gameover = true;
 let x = 300;
 let y = 450;
@@ -32,15 +32,16 @@ class bullet {
 }
 function setup() {
   createCanvas(700,500);
-  Bullet = new bullet();
+  spawnBullets();
 }
-//loop to make the background black (might change in the future, hence the variable), display the player and what im going to call "shape" for now (displayEntities), and handle the controls (handleKeys)
 function draw() {
   background (backgroundColor);
   displayEntities();
   handleKeys();
-  Bullet.moveAndHitDet();
-  Bullet.show();
+  for (let i = 0; i < Bullets.index; i++) {
+    Bullets[i].moveAndHitDet();
+    Bullets[i].show();
+  }
 }
 function handleKeys() {
   if (mouseIsPressed) {
@@ -60,6 +61,12 @@ function handleKeys() {
     if (x > 620) {
       x = 620;
     }
+  }
+}
+function spawnBullets(){
+  for (let i = 0; i < 3; i ++) {
+    let Bullet = new bullet();
+    Bullets.push(Bullet);
   }
 }
 function displayEntities() {
