@@ -38,7 +38,7 @@ function draw() {
   background (backgroundColor);
   displayEntities();
   handleKeys();
-  for (let i = 0; i < Bullets.index; i++) {
+  for (let i = 0; i < Bullets.length; i++) {
     Bullets[i].moveAndHitDet();
     Bullets[i].show();
   }
