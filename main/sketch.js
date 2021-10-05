@@ -10,10 +10,13 @@ let y2 = 100;
 let speed = 4;
 let backgroundColor = "black";
 let ball;
+let lastChanged = 0;
+let spawn = true;
+let gotHit = false;
 //just makes the canvas 
 class bullet {
   constructor (){
-    this.x = 300;
+    this.x = random(20,width-20);
     this.y = 100;
   }
   show(){
@@ -25,7 +28,7 @@ class bullet {
     this.y += 1;
     let hit = collideRectRect(this.x,this.y,10,10,x,y,80,5);
     if (hit) {
-      console.log("hit");
+      gotHit = true;
     }
   }
 
@@ -33,11 +36,28 @@ class bullet {
 function setup() {
   createCanvas(700,500);
   spawnBullets();
+  millis();
 }
 function draw() {
   background (backgroundColor);
   displayEntities();
   handleKeys();
+  console.log(spawn);
+  console.log(lastChanged);
+  console.log(millis());
+  if (gotHit === true) {
+    setup();
+    setup();
+  }
+  if (spawn === true) {
+    spawnBullets();
+    spawn = false;
+  }
+  if (millis() > lastChanged){
+    lastChanged += 2000;
+    spawn = true;
+    console.log(lastChanged);
+  }
   for (let i = 0; i < Bullets.length; i++) {
     Bullets[i].moveAndHitDet();
     Bullets[i].show();
