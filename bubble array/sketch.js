@@ -8,7 +8,7 @@ function setup() {
   
 }
 function mousePressed() {
-  for (let i = 0;  i<1000 ; i ++){
+  for (let i = 0;  i<10 ; i ++){
     spawnBubble(); 
   }
 }
@@ -20,6 +20,7 @@ function spawnBubble() {
     dx:  0,
     dy: -5, 
     theColor: color(random(255),random(255),random(255),random(255)),
+    theTime: random(1000),
   };
   theBubbles.push(bubble);
 }
@@ -32,7 +33,8 @@ function draw() {
 function bubbleUp() {
   for (let bubble of theBubbles) {
     bubble.y += bubble.dy;
-    bubble.x += random(-5,5);
+    bubble.x += noise(bubble.theTime) * 10;
+    bubble.theTime += 0.001;
   }
 }
 function displayBubble() {
