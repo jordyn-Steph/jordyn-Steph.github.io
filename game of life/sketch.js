@@ -1,28 +1,28 @@
-// Game of Life
+// Character In Grid
 
 let grid;
-let gridSize = 100;
+let gridSize = 20;
 let cellWidth, cellHeight;
-let autoplay = false;
-let gun;
+let level;
+let playerX = 0;
+let playerY = 0;
 
-
-function preload(){
-  gun = loadJSON("assets/gosper-gun.json"); //assumes grid size is 100
-
+function preload() {
+  level = loadJSON("assets/level1.json"); //assumes gridSize is 20
 }
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  grid = createEmpty2DArray(gridSize, gridSize);
+  grid = level;
   cellWidth = width/gridSize;
   cellHeight = height/gridSize;
+
+  //put player in grid
+  grid[playerY][playerX] = 9;
 }
 
 function draw() {
   background(220);
-  if (autoplay && frameCount % 1 === 0){
-    nextTurn();
-  }
   displayGrid();
 }
 
@@ -33,51 +33,36 @@ function keyPressed() {
   if (key === "r") {
     grid = createRandom2DArray(gridSize, gridSize);
   }
-  if(key === " "){
-    nextTurn();
+  if (key === "s") {
+    tryToMoveTo(playerX, playerY+1);
   }
-  if (key === "a"){
-    autoplay = !autoplay;
+  else if (key === "w") {
+    tryToMoveTo(playerX, playerY-1);
   }
-  if (key === "g"){
-    grid = gun;
+  else if (key === "a") {
+    tryToMoveTo(playerX-1, playerY);
+  }
+  else if (key === "d") {
+    tryToMoveTo(playerX+1, playerY);
   }
 }
-function nextTurn(){
-  let newBoard = createRandom2DArray(gridSize,gridSize);
-  for(let y = 0; y < gridSize; y++){
-    for(let x = 0; x < gridSize; x++){
-      let neighbors = 0;
-      //look at neighboors and count
-      for(let i = -1; i <= 1; i++){
-        for(let j = -1; j <= 1; j++){
-          if(y+i >= 0 && x + j >= 0 && y+i < gridSize && x + j < gridSize){
-            neighbors += grid[y+i][x+j];
-          }
-        }
-      }
-      neighbors -= grid[y][x];
-      //game rules
-      if(grid[y][x]===1){ //alive
-        if(neighbors === 2 || neighbors === 3){
-          newBoard[y][x] = 1;
-        }
-        else{
-          newBoard[y][x] = 0;
-        }
-      }
-      if(grid[y][x] === 0){
-        if(neighbors === 3){
-          newBoard[y][x] = 1;
-        }
-        else {
-          newBoard[y][x] = 0;
-        }
-      }
+
+function tryToMoveTo(newX, newY) {
+  //make sure you're on the grid
+  if (newX >= 0 && newY >= 0 && newX < gridSize && newY < gridSize) {
+    if (grid[newY][newX] === 0) { //if new spot is empty
+      //reset current player spot to empty
+      grid[playerY][playerX] = 0;
+    
+      playerX = newX;
+      playerY = newY;
+    
+      //set new player spot to red
+      grid[playerY][playerX] = 9;
     }
   }
-  grid = newBoard;
 }
+
 
 function mousePressed() {
   let cellX = Math.floor(mouseX/cellWidth);
@@ -94,11 +79,14 @@ function mousePressed() {
 function displayGrid() {
   for (let y=0; y<gridSize; y++) {
     for (let x=0; x<gridSize; x++) {
-      if (grid[y][x] === 1) {
+      if (grid[y][x] === 0) {
         fill("white");
       }
-      if (grid[y][x] === 0) {
+      if (grid[y][x] === 1) {
         fill("black");
+      }
+      if (grid[y][x] === 9) {
+        fill("red");
       }
       rect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
     }
