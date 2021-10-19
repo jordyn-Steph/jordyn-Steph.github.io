@@ -64,7 +64,7 @@ function draw() {
   //if the player gets hit, removes all bullets off screen
   if (gotHit === true) {
     for (let die = 0; die < Bullets.length + 3; die++) {
-    Bullets.pop()
+      Bullets.pop();
     }
     gotHit = false;
     bulletSpeed = 3;
