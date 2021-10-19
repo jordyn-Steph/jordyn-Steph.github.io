@@ -1,5 +1,5 @@
-// Project Title
-// Your Name
+// grid based game
+// jordyn
 // Date
 //
 // Extra for Experts:
