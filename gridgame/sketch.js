@@ -7,12 +7,12 @@
 // Game of Life
 
 let grid;
-let gridSize = 100;
+let gridSize = 40;
 let cellWidth, cellHeight;
 let autoplay = false;
 let gun;
-let cellX;
-let cellY;
+let cellX = 0;
+let cellY = 0;
 
 
 
@@ -53,9 +53,18 @@ function keyPressed() {
       grid[cellY][cellX] = 2;
     }
   }
+  if (key === "q"){
+    if (grid[cellY][cellX] === 0) {
+      grid[cellY][cellX] = 1;
+    }
+    else if (grid[cellY][cellX] === 1) {
+      grid[cellY][cellX] = 0;
+    }
+  }
 }
 function nextTurn(){
-  let newBoard = createRandom2DArray(gridSize,gridSize);
+  let newBoard = createEmpty2DArray(gridSize,gridSize);
+  let greenCellNearby = false;
   for(let y = 0; y < gridSize; y++){
     for(let x = 0; x < gridSize; x++){
       let neighbors = 0;
@@ -66,32 +75,42 @@ function nextTurn(){
             if (grid[y+i][x+j] === 1){
               neighbors ++;// grid[y+i][x+j];
             }
+            if (grid[y+i][x+j] === 2) {
+              greenCellNearby = true;
+
+            }
           }
         }
       }
       neighbors -= grid[y][x];
       //game rules
-      if(grid[y][x]===1){ //alive
-        if(neighbors === 2 || neighbors === 3){
-          newBoard[y][x] = 1;
-        }
-        else{
-          newBoard[y][x] = 0;
-        }
-      }
-      if(grid[y][x] === 0){
-        if(neighbors === 3){
-          newBoard[y][x] = 1;
-        }
-        else {
-          newBoard[y][x] = 0;
-        }
-      }
+      // if(grid[y][x]===1){ //alive
+      //   if((neighbors === 2 || neighbors === 3) && grid[y][x] !== 2){
+      //     newBoard[y][x] = 1;
+      //   }
+      //   else{
+      //     newBoard[y][x] = 0;
+      //   }
+      // }
+      // if(grid[y][x] === 0){
+      //   if(neighbors === 3){
+      //     newBoard[y][x] = 1;
+      //   }
+      //   else {
+      //     newBoard[y][x] = 0;
+      //   }
+      // }
       if(grid[y][x] === 2){
-        newBoard[y][x] === 2;
+        newBoard[y][x] = 2;
       }
+      // else if(greenCellNearby && grid[y][x] !== 2){
+      //   newBoard[y][x] = 1;
+      //   greenCellNearby = false;
+      // }
     }
   }
+  console.log(grid);
+  console.log(newBoard);
   grid = newBoard;
 }
 
@@ -99,12 +118,6 @@ function mousePressed() {
   cellX = Math.floor(mouseX/cellWidth);
   cellY = Math.floor(mouseY/cellHeight);
 
-  if (grid[cellY][cellX] === 0) {
-    grid[cellY][cellX] = 1;
-  }
-  else if (grid[cellY][cellX] === 1) {
-    grid[cellY][cellX] = 0;
-  }
 }
 
 function displayGrid() {
@@ -119,6 +132,10 @@ function displayGrid() {
       if (grid[y][x] === 2) {
         fill("green");
       }
+      push();
+      stroke(255);
+      rect(cellX * cellWidth, cellY*cellHeight,cellWidth,cellHeight);
+      pop();
       rect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
     }
   }
