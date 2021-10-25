@@ -1,8 +1,14 @@
-// Grid Demo
+// Grid images Demo
 
-let gridSize = 500;
+let gridSize = 30;
 let grid;
+let grassImg;
+let leavesImg;
 
+function preload(){
+  grassImg = loadImage("assets/grass.png");
+  leavesImg = loadImage("assets/leaves.png");
+}
 function setup() {
   createCanvas(windowWidth, windowHeight);
   grid = createRandom2DArray(gridSize, gridSize);
@@ -20,10 +26,10 @@ function mousePressed() {
   let cellX = Math.floor(mouseX/cellWidth);
   let cellY = Math.floor(mouseY/cellHeight);
 
-  if (grid[cellY][cellX] === 1){
+  if (grid[cellY][cellX] === 1) {
     grid[cellY][cellX] = 0;
   }
-  else if (grid[cellY][cellX] === 0){
+  else if (grid[cellY][cellX] === 0) {
     grid[cellY][cellX] = 1;
   }
 }
@@ -35,12 +41,11 @@ function displayGrid() {
   for (let y=0; y<gridSize; y++) {
     for (let x=0; x<gridSize; x++) {
       if (grid[y][x] === 0) {
-        fill("white");
+        image(grassImg, x*cellWidth, y*cellHeight, cellWidth, cellHeight );
       }
       else if (grid[y][x] === 1) {
-        fill("black");
+        image(leavesImg, x*cellWidth, y*cellHeight, cellWidth, cellHeight);
       }
-      rect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
     }
   }
 }
@@ -70,4 +75,4 @@ function createRandom2DArray(rows, cols) {
     }
   }
   return grid;
-} 
+}
