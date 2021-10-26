@@ -49,20 +49,26 @@ function keyPressed() {
     autoplay = !autoplay;
   }
   if (key === "g"){
-    if (grid[cellY][cellX] === 0) {
+    if (grid[cellY][cellX] === 0 || grid[cellY][cellX] !== 2) {
       grid[cellY][cellX] = 2;
+    }
+    else if (grid[cellY][cellX] === 2) {
+      grid[cellY][cellX] = 0;
     }
   }
   if (key === "h"){
-    if (grid[cellY][cellX] === 0) {
+    if (grid[cellY][cellX] === 0 || grid[cellY][cellX] !== 3) {
       grid[cellY][cellX] = 3;
+    }
+    else if (grid[cellY][cellX] === 3) {
+      grid[cellY][cellX] = 0;
     }
   }
   if (key === "q"){
-    if (grid[cellY][cellX] === 0) {
+    if (grid[cellY][cellX] !== 1) {
       grid[cellY][cellX] = 1;
     }
-    else if (grid[cellY][cellX] === 1) {
+    else if (grid[cellY][cellX] !== 0) {
       grid[cellY][cellX] = 0;
     }
   }
