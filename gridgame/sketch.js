@@ -205,4 +205,11 @@ function createRandom2DArray(rows, cols) {
     }
   }
   return board;
+  function setPlayArea(){
+    for(let i = 0; i < 10;i++){
+      for(let j = 0; j < 10 ;i){
+        let i = 0;
+      }
+    }
+  }
 }
