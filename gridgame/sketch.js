@@ -25,6 +25,7 @@ function setup() {
   grid = createEmpty2DArray(gridSize, gridSize);
   cellWidth = width/gridSize;
   cellHeight = height/gridSize;
+  setPlayArea(0,0,10,15);
 }
 
 function draw() {
@@ -40,13 +41,15 @@ function keyPressed() {
     grid = createEmpty2DArray(gridSize, gridSize);
   }
   if (key === "r") {
-    grid = createRandom2DArray(gridSize, gridSize);
+    grid = createEmpty2DArray(gridSize, gridSize);  
+    setPlayArea(0,0,10,15);
   }
   if(key === " "){
     nextTurn();
   }
   if (key === "a"){
     autoplay = !autoplay;
+    console.log("autoplay toggled");
   }
   if (key === "g"){
     if (grid[cellY][cellX] === 0 || grid[cellY][cellX] !== 2) {
@@ -132,8 +135,6 @@ function nextTurn(){
       }
     }
   }
-  console.log(grid);
-  console.log(newBoard);
   grid = newBoard;
 }
 
@@ -158,6 +159,9 @@ function displayGrid() {
       if (grid[y][x] === 3) {
         fill("red");
       }
+      if (grid[y][x] === 4) {
+        fill("blue");
+      }
       push();
       stroke(255,100,100);
       if (grid[cellY][cellX] === 1) {
@@ -171,6 +175,9 @@ function displayGrid() {
       }
       if (grid[cellY][cellX] === 3) {
         fill("red");
+      }
+      if (grid[cellY][cellX] === 4) {
+        fill("blue");
       }
       
       rect(cellX * cellWidth, cellY*cellHeight,cellWidth,cellHeight);
@@ -205,10 +212,15 @@ function createRandom2DArray(rows, cols) {
     }
   }
   return board;
-  function setPlayArea(){
-    for(let i = 0; i < 10;i++){
-      for(let j = 0; j < 10 ;i){
-        let i = 0;
+}
+function setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2){
+  for(let i = playAreaY; i < playAreaY2;i++){
+    for(let j = playAreaX; j < playAreaX2 ;j++){
+      if (i === playAreaY || i === playAreaY2){
+        grid[i][j] = 4;
+      }
+      else{
+        grid[i][j] = 4;
       }
     }
   }
