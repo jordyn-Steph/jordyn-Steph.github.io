@@ -26,9 +26,19 @@ function draw() {
   }
 }
 function mousePressed(){
-  for (let i = 0; i < 5000000; i++){
-    let theBall = new ball(mouseX, mouseY);
-    theBalls.push(theBall);
+  for(let i = theBalls.length-1; i >= 0; i--){
+    if(theBalls[i].isPointInBall(mouseX,mouseY)){
+      theBalls.splice[i,1];
+    }
+  }
+}
+function keyPressed(){
+  if( key === " "){
+    for (let i = 0; i < 500; i++){
+      let theBall = new ball(mouseX, mouseY);
+      theBalls.push(theBall);
+
+    }
   }
 
 }
@@ -54,6 +64,16 @@ class ball {
     }
     if(this.y - this.radius <= 0 || this.y + this.radius >= height){
       this.dy = -this.dy;
+    }
+  }
+
+  isPointInBall(x, y) {
+    if (dist(x, y, this.x, this.y) < this.radius) {
+      //inside ball
+      return true;
+    }
+    else {
+      return false;
     }
   }
 
