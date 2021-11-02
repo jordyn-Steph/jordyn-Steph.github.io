@@ -13,6 +13,10 @@ let autoplay = false;
 let gun;
 let cellX = 0;
 let cellY = 0;
+let playAreaX = 10;
+let playAreaX2 = 20;
+let playAreaY = 10;
+let playAreaY2 = 25;
 
 
 // function preload(){
@@ -25,7 +29,7 @@ function setup() {
   grid = createEmpty2DArray(gridSize, gridSize);
   cellWidth = width/gridSize;
   cellHeight = height/gridSize;
-  setPlayArea(0,0,10,15);
+  setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2);
 }
 
 function draw() {
@@ -42,7 +46,7 @@ function keyPressed() {
   }
   if (key === "r") {
     grid = createEmpty2DArray(gridSize, gridSize);  
-    setPlayArea(0,0,10,15);
+    setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2);
   }
   if(key === " "){
     nextTurn();
@@ -139,9 +143,19 @@ function nextTurn(){
 }
 
 function mousePressed() {
-  cellX = Math.floor(mouseX/cellWidth);
-  cellY = Math.floor(mouseY/cellHeight);
+  console.log(Math.floor(mouseY/cellHeight));
+  console.log(Math.floor(mouseX/cellWidth));
 
+  if(Math.floor(mouseX/cellWidth) > playAreaX && Math.floor(mouseX/cellWidth) < playAreaX2 && Math.floor(mouseY/cellHeight) > playAreaY && Math.floor(mouseY/cellHeight) < playAreaY2){
+    cellX = Math.floor(mouseX/cellWidth);
+    cellY = Math.floor(mouseY/cellHeight);
+  }
+
+}
+class Square {
+  constructor() {
+
+  }
 }
 
 function displayGrid() {
