@@ -10,20 +10,24 @@ let grid;
 let gridSize = 40;
 let cellWidth, cellHeight;
 let autoplay = false;
-let gun;
-let cellX = 0;
-let cellY = 0;
 let playAreaX = 10;
-let playAreaX2 = 20;
+let playAreaX2 = 15;
 let playAreaY = 10;
-let playAreaY2 = 25;
+let playAreaY2 = 15;
+let cellX = playAreaX;
+let cellY = playAreaY;
+let level;
+let level1;
+let level2;
 
 
-// function preload(){
-//  gun = loadJSON("assets/gosper-gun.json"); //assumes grid size is 100
+function preload(){
+  level1 = loadJSON("assets/level1.json"); //assumes grid size is 40
+  level2 = loadJSON("assets/level2.json");
 
-//}
+}
 function setup() {
+  level = level1;
   background(255);
   createCanvas(windowWidth, windowHeight);
   grid = createEmpty2DArray(gridSize, gridSize);
@@ -38,6 +42,7 @@ function draw() {
     nextTurn();
   }
   displayGrid();
+  displayText();
 }
 
 function keyPressed() {
@@ -45,7 +50,13 @@ function keyPressed() {
     grid = createEmpty2DArray(gridSize, gridSize);
   }
   if (key === "r") {
-    grid = createEmpty2DArray(gridSize, gridSize);  
+    level = level1;
+    grid = level1;  
+    setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2);
+  }
+  if (key === "b") {
+    level = level2;
+    grid = level2;  
     setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2);
   }
   if(key === " "){
@@ -146,10 +157,10 @@ function mousePressed() {
   console.log(Math.floor(mouseY/cellHeight));
   console.log(Math.floor(mouseX/cellWidth));
 
-  if(Math.floor(mouseX/cellWidth) > playAreaX && Math.floor(mouseX/cellWidth) < playAreaX2 && Math.floor(mouseY/cellHeight) > playAreaY && Math.floor(mouseY/cellHeight) < playAreaY2){
+//  if(Math.floor(mouseX/cellWidth) > playAreaX && Math.floor(mouseX/cellWidth) < playAreaX2 && Math.floor(mouseY/cellHeight) > playAreaY && Math.floor(mouseY/cellHeight) < playAreaY2){
     cellX = Math.floor(mouseX/cellWidth);
     cellY = Math.floor(mouseY/cellHeight);
-  }
+//  }
 
 }
 class Square {
@@ -238,4 +249,15 @@ function setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2){
       }
     }
   }
+}
+function displayText() {
+  textSize(10);
+  fill(100,100,100);
+  text("controls",10,10);
+  text("Q will toggle white squares (alive cells) with basic conways rules.",5,20);
+  text("G will toggle green squares, which makes all cells around it alive regaurdless of the state around them.",5,30);
+  text("H will toggle red squares, which makes all cells around it dead (black) regaurdless of the state around them, this overides green squares",5,40);
+  text("space to go to next turn",5,50);
+  text("A will turn on autoplay",5,60);
+  text("r will restart the level",5,70);
 }
