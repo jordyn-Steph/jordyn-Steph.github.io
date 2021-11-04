@@ -19,6 +19,9 @@ let cellY = playAreaY;
 let level;
 let level1;
 let level2;
+let levels = [level1,level2];
+let win = false;
+let devmode = true;
 
 
 function preload(){
@@ -27,10 +30,11 @@ function preload(){
 
 }
 function setup() {
+  levels[0] = level1;
   level = level1;
   background(255);
   createCanvas(windowWidth, windowHeight);
-  grid = createEmpty2DArray(gridSize, gridSize);
+  grid = level;
   cellWidth = width/gridSize;
   cellHeight = height/gridSize;
   setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2);
@@ -43,6 +47,12 @@ function draw() {
   }
   displayGrid();
   displayText();
+  if (level === level1){
+    if (grid[18][39] !== 1){
+      text("you win!",windowWidth/2,windowHeight/2);
+      text("(press n to continue)",windowWidth/2 - 30,windowHeight/2 + 10);
+    }
+  }
 }
 
 function keyPressed() {
@@ -50,8 +60,8 @@ function keyPressed() {
     grid = createEmpty2DArray(gridSize, gridSize);
   }
   if (key === "r") {
-    level = level1;
-    grid = level1;  
+    level = levels[0];
+    grid = level;  
     setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2);
   }
   if (key === "b") {
@@ -89,6 +99,10 @@ function keyPressed() {
     else if (grid[cellY][cellX] !== 0) {
       grid[cellY][cellX] = 0;
     }
+  }
+  if(key === "n") {
+    level = levels[1];
+    grid = level;
   }
 }
 
@@ -157,10 +171,10 @@ function mousePressed() {
   console.log(Math.floor(mouseY/cellHeight));
   console.log(Math.floor(mouseX/cellWidth));
 
-//  if(Math.floor(mouseX/cellWidth) > playAreaX && Math.floor(mouseX/cellWidth) < playAreaX2 && Math.floor(mouseY/cellHeight) > playAreaY && Math.floor(mouseY/cellHeight) < playAreaY2){
+ // if(Math.floor(mouseX/cellWidth) > playAreaX && Math.floor(mouseX/cellWidth) < playAreaX2 && Math.floor(mouseY/cellHeight) > playAreaY && Math.floor(mouseY/cellHeight) < playAreaY2 && devmode === false){
     cellX = Math.floor(mouseX/cellWidth);
     cellY = Math.floor(mouseY/cellHeight);
-//  }
+  //}
 
 }
 class Square {
