@@ -31,6 +31,7 @@ function preload(){
 }
 function setup() {
   levels[0] = level1;
+  levels[1] = level2;
   level = level1;
   background(255);
   createCanvas(windowWidth, windowHeight);
@@ -47,12 +48,7 @@ function draw() {
   }
   displayGrid();
   displayText();
-  if (level === level1){
-    if (grid[18][39] !== 1){
-      text("you win!",windowWidth/2,windowHeight/2);
-      text("(press n to continue)",windowWidth/2 - 30,windowHeight/2 + 10);
-    }
-  }
+  levelHandler();
 }
 
 function keyPressed() {
@@ -100,7 +96,7 @@ function keyPressed() {
       grid[cellY][cellX] = 0;
     }
   }
-  if(key === "n") {
+  if(key === "n" && win === true) {
     level = levels[1];
     grid = level;
   }
@@ -274,4 +270,13 @@ function displayText() {
   text("space to go to next turn",5,50);
   text("A will turn on autoplay",5,60);
   text("r will restart the level",5,70);
+}
+function levelHandler(){
+  if (level === level1){
+    if (grid[18][39] !== 1){
+      win = true;
+      text("you win!",windowWidth/2,windowHeight/2);
+      text("(press n to continue)",windowWidth/2 - 30,windowHeight/2 + 10);
+    }
+  }
 }
