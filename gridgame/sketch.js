@@ -1,37 +1,35 @@
 // grid based game
 // jordyn
-// Date
+// 11/9/2021
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
-// Game of Life
+// Game of Life puzzle thing
 
+//global variables
 let grid;
 let gridSize = 40;
 let cellWidth, cellHeight;
 let autoplay = false;
 let playAreaX = 10;
-let playAreaX2 = 15;
+let playAreaX2 = 20;
 let playAreaY = 10;
-let playAreaY2 = 15;
+let playAreaY2 = 30;
 let cellX = playAreaX;
 let cellY = playAreaY;
 let level;
 let level1;
 let level2;
-let levels = [level1,level2];
-let win = false;
-let devmode = true;
+let levels = [level1];
+let sandboxMode = false;
 
-
+//preloads levels, only one since not enough time
 function preload(){
   level1 = loadJSON("assets/level1.json"); //assumes grid size is 40
-  level2 = loadJSON("assets/level2.json");
-
 }
+//setup function that handles the inital level, grid, and cell sizes
 function setup() {
   levels[0] = level1;
-  levels[1] = level2;
   level = level1;
   background(255);
   createCanvas(windowWidth, windowHeight);
@@ -40,7 +38,7 @@ function setup() {
   cellHeight = height/gridSize;
   setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2);
 }
-
+//draw function that updates the grid every time it can
 function draw() {
   background(100);
   if (autoplay && frameCount % 1 === 0){
@@ -50,29 +48,24 @@ function draw() {
   displayText();
   levelHandler();
 }
-
+//key pressed handles cell changes
 function keyPressed() {
-  if (key === "e") {
+  if (key === "e" && sandboxMode === true) {
     grid = createEmpty2DArray(gridSize, gridSize);
   }
-  if (key === "r") {
+  if (key === "r") { //goes to first level
     level = levels[0];
     grid = level;  
     setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2);
   }
-  if (key === "b") {
-    level = level2;
-    grid = level2;  
-    setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2);
-  }
-  if(key === " "){
+  if(key === " "){ //next turn
     nextTurn();
   }
-  if (key === "a"){
+  if (key === "a"){ //autoplay toggles
     autoplay = !autoplay;
     console.log("autoplay toggled");
   }
-  if (key === "g"){
+  if (key === "g"){ //toggles green cells
     if (grid[cellY][cellX] === 0 || grid[cellY][cellX] !== 2) {
       grid[cellY][cellX] = 2;
     }
@@ -80,7 +73,7 @@ function keyPressed() {
       grid[cellY][cellX] = 0;
     }
   }
-  if (key === "h"){
+  if (key === "h"){ //toggles red cells
     if (grid[cellY][cellX] === 0 || grid[cellY][cellX] !== 3) {
       grid[cellY][cellX] = 3;
     }
@@ -88,7 +81,7 @@ function keyPressed() {
       grid[cellY][cellX] = 0;
     }
   }
-  if (key === "q"){
+  if (key === "q"){ //toggles white cells
     if (grid[cellY][cellX] !== 1) {
       grid[cellY][cellX] = 1;
     }
@@ -96,12 +89,13 @@ function keyPressed() {
       grid[cellY][cellX] = 0;
     }
   }
-  if(key === "n" && win === true) {
-    level = levels[1];
-    grid = level;
+  if(key === "s"){ //toggles sandbox mode
+    sandboxMode = !sandboxMode;
+    grid === createEmpty2DArray();
+    console.log(sandboxMode)
   }
 }
-
+//handles turns in grid
 function nextTurn(){
   let newBoard = createEmpty2DArray(gridSize,gridSize);
   let greenCellNearby = false;
@@ -109,7 +103,7 @@ function nextTurn(){
   for(let y = 0; y < gridSize; y++){
     for(let x = 0; x < gridSize; x++){
       let neighbors = 0;
-      //look at neighboors and count
+      //look at neighboors and count, and check if red or green cell is nearby
       for(let i = -1; i <= 1; i++){
         for(let j = -1; j <= 1; j++){
           if(y+i >= 0 && x + j >= 0 && y+i < gridSize && x + j < gridSize){
@@ -134,6 +128,14 @@ function nextTurn(){
         }
         else{
           newBoard[y][x] = 0;
+        }
+      }
+      if(grid[y][x] === 5){
+        if(neighbors <= 1){
+          newBoard[y][x] === 0;
+        }
+        else{
+          newBoard[y][x] === 5;
         }
       }
       if(grid[y][x] === 0){
@@ -162,23 +164,22 @@ function nextTurn(){
   }
   grid = newBoard;
 }
-
+//handles the cellx and celly
 function mousePressed() {
   console.log(Math.floor(mouseY/cellHeight));
   console.log(Math.floor(mouseX/cellWidth));
 
-  if(Math.floor(mouseX/cellWidth) > playAreaX && Math.floor(mouseX/cellWidth) < playAreaX2 && Math.floor(mouseY/cellHeight) > playAreaY && Math.floor(mouseY/cellHeight) < playAreaY2 && devmode === false){
+  if(sandboxMode === true){
+    cellX = Math.floor(mouseX/cellWidth);
+    cellY = Math.floor(mouseY/cellHeight);
+  }
+  else if (Math.floor(mouseX/cellWidth) >= playAreaX && Math.floor(mouseX/cellWidth) <= playAreaX2 && Math.floor(mouseY/cellHeight) >= playAreaY && Math.floor(mouseY/cellHeight) <= playAreaY2 && sandboxMode === false){
     cellX = Math.floor(mouseX/cellWidth);
     cellY = Math.floor(mouseY/cellHeight);
   }
 
 }
-class Square {
-  constructor() {
-
-  }
-}
-
+//displaying the grid
 function displayGrid() {
   for (let y=0; y<gridSize; y++) {
     for (let x=0; x<gridSize; x++) {
@@ -197,6 +198,9 @@ function displayGrid() {
       if (grid[y][x] === 4) {
         fill("blue");
       }
+      if(grid[y][x] === 5){
+        fill("purple");
+      }
       push();
       stroke(255,100,100);
       if (grid[cellY][cellX] === 1) {
@@ -214,14 +218,13 @@ function displayGrid() {
       if (grid[cellY][cellX] === 4) {
         fill("blue");
       }
-      
       rect(cellX * cellWidth, cellY*cellHeight,cellWidth,cellHeight);
       pop();
       rect(x*cellWidth, y*cellHeight, cellWidth, cellHeight);
     }
   }
 }
-
+//sets grid to empty
 function createEmpty2DArray(rows, cols) {
   let board = [];
   for (let y=0; y<rows; y++) {
@@ -232,7 +235,7 @@ function createEmpty2DArray(rows, cols) {
   }
   return board;
 }
-
+//sets random array, currently not used
 function createRandom2DArray(rows, cols) {
   let board = [];
   for (let y=0; y<rows; y++) {
@@ -248,6 +251,7 @@ function createRandom2DArray(rows, cols) {
   }
   return board;
 }
+//sets the play area so it can be drawn in blue
 function setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2){
   for(let i = playAreaY; i < playAreaY2;i++){
     for(let j = playAreaX; j < playAreaX2 ;j++){
@@ -260,6 +264,7 @@ function setPlayArea(playAreaX,playAreaY,playAreaX2,playAreaY2){
     }
   }
 }
+//displays the text on the top
 function displayText() {
   textSize(10);
   fill(100,100,100);
@@ -270,13 +275,15 @@ function displayText() {
   text("space to go to next turn",5,50);
   text("A will turn on autoplay",5,60);
   text("r will restart the level",5,70);
+  text("s will toggle sandbox mode, where your not limited to where you can click",5,80);
 }
+//this is where the levels would be changed, if i had more than 1.
 function levelHandler(){
   if (level === level1){
-    if (grid[18][39] !== 1){
+    if (grid[18][39] !== 5){
       win = true;
       text("you win!",windowWidth/2,windowHeight/2);
-      text("(press n to continue)",windowWidth/2 - 30,windowHeight/2 + 10);
+      text("(there is currently no more levels)",windowWidth/2 - 30,windowHeight/2 + 10);
     }
   }
 }
