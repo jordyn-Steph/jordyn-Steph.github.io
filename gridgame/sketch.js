@@ -167,10 +167,10 @@ function mousePressed() {
   console.log(Math.floor(mouseY/cellHeight));
   console.log(Math.floor(mouseX/cellWidth));
 
- // if(Math.floor(mouseX/cellWidth) > playAreaX && Math.floor(mouseX/cellWidth) < playAreaX2 && Math.floor(mouseY/cellHeight) > playAreaY && Math.floor(mouseY/cellHeight) < playAreaY2 && devmode === false){
+  if(Math.floor(mouseX/cellWidth) > playAreaX && Math.floor(mouseX/cellWidth) < playAreaX2 && Math.floor(mouseY/cellHeight) > playAreaY && Math.floor(mouseY/cellHeight) < playAreaY2 && devmode === false){
     cellX = Math.floor(mouseX/cellWidth);
     cellY = Math.floor(mouseY/cellHeight);
-  //}
+  }
 
 }
 class Square {
