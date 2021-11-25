@@ -1,27 +1,22 @@
-let lastTimeSwitched = 0;
-let isRed = false;
-let ball;
+let clickCount = 0;
 
-function preload() {
-  ball = loadImage("assets/ballss.png");
+function setup(){
+  createCanvas(windowWidth,windowHeight);
 }
-
-function setup() {
-  createCanvas(400, 400);
-}
-
-function draw() {
+function draw(){
   background(220);
-  if (isRed) {
-    background("red");
+
+  //current click
+  textSize(42);
+  fill("black");
+  text(clickCount, width/2, height/2);
+  //highest click
+  fill("red");
+  text(getItem("highscore", 100 , 100));
+}
+function mousePressed(){
+  clickCount++;
+  if (clickCount > getItem("highscore")){
+    storeItem("highscore",clickCount);
   }
-  else {
-    background("black");
-  }
-  image(ball,0,0, 40, 40);
-  if (millis() > lastTimeSwitched + 2000) {
-    lastTimeSwitched = millis();
-    isRed = !isRed;
-  }
-  console.log(millis());
 }
